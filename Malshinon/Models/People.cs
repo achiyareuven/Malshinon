@@ -18,5 +18,8 @@ namespace Malshinon.Models
 
         public int NumMentions { get; set; }
 
+        public bool IsDangerous {  get; set; }
+        public bool IsRecruitCandidate{ get;set; }
+
     }
 }

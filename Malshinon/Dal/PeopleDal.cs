@@ -61,7 +61,7 @@ namespace Malshinon.Dal
         }
         public static People GetPersonByName(string firstName, string lastName)
         {
-            string sql = @"SELECT id, first_name, last_name, secret_code, num_reports, num_mentions
+            string sql = @"SELECT id, first_name, last_name, secret_code, num_reports, num_mentions, is_dangerous, is_recruit_candidate
                    FROM people
                    WHERE first_name = @first AND last_name = @last
                    LIMIT 1";
@@ -87,11 +87,33 @@ namespace Malshinon.Dal
                 SecretCode = row["secret_code"].ToString(),
                 NumReports = Convert.ToInt32(row["num_reports"]),
                 NumMentions = Convert.ToInt32(row["num_mentions"]),
+                IsDangerous = Convert.ToBoolean(row["is_dangerous"]),
+                IsRecruitCandidate = Convert.ToBoolean(row["is_recruit_candidate"])
 
             };
         }
 
+        public static void UpDateRecruitStatus(int reporterId, bool IsCandidate)
+        {
+            string sql = @"UPDATE people SET is_recruit_candidate = @status WHERE id = @id";
+            var parameters = new Dictionary<string, object>
+            {
+                {"@status", IsCandidate},
+                {"@id",reporterId }
+            };
+            DBConnection1.ExecuteNonQuery(sql, parameters);
+        }
 
+        public static void UpDateDangerousStatus(int targetId, bool IsDangerous)
+        {
+            string sql = @"UPDATE people SET is_dangerous = @status WHERE id = @id";
+            var parameters = new Dictionary<string, object>
+            {
+                {"@status", IsDangerous},
+                {"@id",targetId }
+            };
+            DBConnection1.ExecuteNonQuery(sql, parameters);
+        }
 
 
     }

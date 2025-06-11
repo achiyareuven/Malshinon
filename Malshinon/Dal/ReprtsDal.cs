@@ -34,17 +34,19 @@ namespace Malshinon.Dal
                 {
                      {"@id" ,reporterId }
                 };
+                DBConnection1.ExecuteNonQuery(sqlUpdateReporter, parametersReporter);
             } catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
             }
             try
             {
-                string updateTarget = @"UPDATE people SET num_mentions = num_mentions + 1  WHERE id = @id";
+                string sqlupdateTarget = @"UPDATE people SET num_mentions = num_mentions + 1  WHERE id = @id";
                 var targetParameters = new Dictionary<string, object>
                 {
                     {"@id",targetId }
                 };
+                DBConnection1.ExecuteNonQuery(sqlupdateTarget, targetParameters);
             }
             catch (Exception ex)
             {
@@ -53,9 +55,29 @@ namespace Malshinon.Dal
             
                 
            
+
+
+        }
+        public static double GetAvgReportsText(int reporterId)
+        {
+            try
+            {
+                string sql = @"SELECT AVG(CHAR_LENGTH(text)) FROM intelreports WHERE reporter_id = @id";
+                var parameters = new Dictionary<string, object>
+                {
+                    {"@id",reporterId }
+
+                };
+                object result = DBConnection1.ExecuteScalar(sql, parameters);
+                if (result == null || result == DBNull.Value)
+                { return 0; }
+                return Convert.ToDouble(result);
+            }catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return 0;
+            }
             
-
-
         }
     }
 }
