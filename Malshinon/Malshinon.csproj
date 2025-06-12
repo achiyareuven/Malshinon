@@ -97,7 +97,6 @@
   <ItemGroup>
     <Compile Include="CSV\ImportCSV.cs" />
     <Compile Include="Dal\AlertDal.cs" />
-    <Compile Include="Dal\DBConnection.cs" />
     <Compile Include="Dal\DBConnection1.cs" />
     <Compile Include="Dal\PeopleDal.cs" />
     <Compile Include="Dal\ReprtsDal.cs" />
@@ -119,7 +118,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Logs\" />
-    <Folder Include="Utilities\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
