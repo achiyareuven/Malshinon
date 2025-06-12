@@ -10,18 +10,19 @@ namespace Malshinon.Dal
 {
     public static class ReprtsDal
     {
-        public static void AddReport(int reporterId, int targetId, string text)
+        public static void AddReport(int reporterId, int targetId, string text,DateTime time)
         {
             try
             {
-                string sql = @"INSERT INTO intelreports (reporter_id , target_id , text)
-                           VALUES (@reporter_id, @target_id, @text)";
+                string sql = @"INSERT INTO intelreports (reporter_id , target_id , text, timestamp)
+                           VALUES (@reporter_id, @target_id, @text,@timestamp)";
 
                 var parameters = new Dictionary<string, object>
                 {
                     {"@reporter_id",reporterId },
                     {"@target_id", targetId},
-                    {"@text", text}
+                    {"@text", text},
+                    {"@timestamp", time}
                 };
                 DBConnection1.ExecuteNonQuery(sql, parameters);
                 Console.WriteLine("A report was created successfully");

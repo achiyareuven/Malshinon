@@ -95,6 +95,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CSV\ImportCSV.cs" />
     <Compile Include="Dal\AlertDal.cs" />
     <Compile Include="Dal\DBConnection.cs" />
     <Compile Include="Dal\DBConnection1.cs" />
@@ -117,7 +118,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="CSV\" />
     <Folder Include="Logs\" />
     <Folder Include="Utilities\" />
   </ItemGroup>

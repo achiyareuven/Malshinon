@@ -8,6 +8,7 @@ using System.Xml.Linq;
 using Microsoft.Win32.SafeHandles;
 using Org.BouncyCastle.Crypto;
 using Malshinon.Services;
+using Malshinon.CSV;
 
 namespace Malshinon.UI
 {
@@ -28,6 +29,7 @@ namespace Malshinon.UI
                         break;
 
                     case "2":
+                        ImportCSV.ReportByCsv();
                         break;
                     case "3":
                         Input.GetSracrtCodeByNameInpur();
