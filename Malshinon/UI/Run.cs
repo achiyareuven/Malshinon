@@ -15,60 +15,39 @@ namespace Malshinon.UI
     {
         public static void Start()
         {
-            Console.WriteLine("-----reporting system------");
-            do
-            {
-                Console.WriteLine("1: submiy report");
-                Console.WriteLine("2: submit report by CSV");
-                Console.WriteLine("3: get code by name");
-                Console.WriteLine("4: get all candidates for recruitment");
-                Console.WriteLine("5: get all the dangerous targets");
-                Console.WriteLine("6: exit");
-                Console.WriteLine("Choose from stitches 1 to 6");
 
+            while (true)
+            {
+                Input.ShowMenu();
                 string chois = Console.ReadLine();
-                switch(chois)
+
+                switch (chois)
                 {
                     case "1":
-                        Console.WriteLine("enter first name of reporter:");
-                        string firstnamereporter = Console.ReadLine();
-
-                        Console.WriteLine("enter last name of reporter:");
-                        string lastnamereporter = Console.ReadLine();
-
-                        Console.WriteLine("enter first name of target");
-                        string firstnametarget = Console.ReadLine();
-
-                        Console.WriteLine("enter last name of target");
-                        string lastnametarger = Console.ReadLine();
-
-                        Console.WriteLine("enter your report");
-                        string text = Console.ReadLine();
-
-                        ServiceReports.SubmitReport(firstnametarget , lastnametarger,firstnamereporter, lastnamereporter, text);
+                        Input.SubmitReportInput();
                         break;
 
                     case "2":
                         break;
                     case "3":
-                        Console.WriteLine("enter your first name:");
-                        string firstname = Console.ReadLine();
-
-                        Console.WriteLine("enter your last name:");
-                        string lastname = Console.ReadLine();
-
-                        Console.WriteLine(AnalysisService.GetSracrtCodeByName(firstname, lastname));
+                        Input.GetSracrtCodeByNameInpur();
                         break;
                     case "4":
+                        Input.PrintMostRecruitCandidate();
                         break;
                     case "5":
+                        Input.PrintMostDangerous();
                         break;
                     case "6":
                         Console.WriteLine("goodby");
                         return;
-                        
+                    default:
+                        Console.WriteLine("invalid input please Choose from stitches 1 to 6 ");
+                        break;
+
                 }
-            }while (true);
+            }
+            
 
         }
     }

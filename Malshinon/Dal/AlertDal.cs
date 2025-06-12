@@ -11,18 +11,26 @@ namespace Malshinon.Dal
     {
         public static void AddAlert(Alert alert)
         {
-            string sql = @"INSERT INTO alerts (target_id , reason ,window_start, window_end, alert_time)
-                          VALUES (@target_id,@reason,@window_start,@window_end,@alert_time)";
-            var parameters = new Dictionary<string, object>
+            try
             {
-                {"@target_id",alert.TargetId },
-                {"@reason",alert.Reason },
-                {"@window_start",alert.WindowStart },
-                {"@window_end" ,alert.WindowEnd},
-                {"@alert_time" ,alert.AlertTime},
+                string sql = @"INSERT INTO alerts (target_id , reason ,window_start, window_end, alert_time)
+                          VALUES (@target_id,@reason,@window_start,@window_end,@alert_time)";
+                var parameters = new Dictionary<string, object>
+                {
+                    {"@target_id",alert.TargetId },
+                    {"@reason",alert.Reason },
+                    {"@window_start",alert.WindowStart },
+                    {"@window_end" ,alert.WindowEnd},
+                    {"@alert_time" ,alert.AlertTime},
 
-            };
-            DBConnection1.ExecuteNonQuery(sql, parameters);
+                };
+                DBConnection1.ExecuteNonQuery(sql, parameters);
+                Console.WriteLine("Alert created successfully:");
+            }catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                Console.WriteLine("Error creating alert");
+            }
         }
     }
 }

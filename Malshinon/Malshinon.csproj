@@ -109,6 +109,7 @@
     <Compile Include="Services\AnalysisService.cs" />
     <Compile Include="Services\CsvImportService.cs" />
     <Compile Include="Services\ServiceReports.cs" />
+    <Compile Include="UI\Input.cs" />
     <Compile Include="UI\Run.cs" />
   </ItemGroup>
   <ItemGroup>

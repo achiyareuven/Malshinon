@@ -28,10 +28,30 @@ namespace Malshinon.Services
             }
             return $"your seacret code is: {PeopleDal.GetPersonByName(firstname, lastname).SecretCode}";
         }
+        public static List<People> GetMostDangerous(string firstname, string lastname)
+        {
+            People people = GetOrCreatePerson(firstname, lastname);
+            if (people.NumReports < 40 && people.NumMentions == 0)
+            {
+                Console.WriteLine("You do not have permission.");
+                return null;
+            }
+            return PeopleDal.GetAllDangerous();
+        }
+        public static List<People> RecruitCandidate(string firstname, string lastname)
+        {
+            People people = GetOrCreatePerson(firstname, lastname);
+            if (people.NumReports < 5)
+            {
+                Console.WriteLine("You do not have permission.");
+                return null;
+            }
+            return PeopleDal.GetAllDangerous();
+        }
 
 
 
-        
+
 
     }
 }

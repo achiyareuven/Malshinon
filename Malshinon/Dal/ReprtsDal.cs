@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Malshinon.Models;
+using Mysqlx;
 
 namespace Malshinon.Dal
 {
@@ -23,10 +24,12 @@ namespace Malshinon.Dal
                     {"@text", text}
                 };
                 DBConnection1.ExecuteNonQuery(sql, parameters);
+                Console.WriteLine("A report was created successfully");
 
             } catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
+                Console.WriteLine("Error creating report");
             }
             try
             {
@@ -36,9 +39,11 @@ namespace Malshinon.Dal
                      {"@id" ,reporterId }
                 };
                 DBConnection1.ExecuteNonQuery(sqlUpdateReporter, parametersReporter);
+                Console.WriteLine("reporter update successfully ");
             } catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
+                Console.WriteLine("Error update report");
             }
             try
             {
@@ -48,14 +53,18 @@ namespace Malshinon.Dal
                     {"@id",targetId }
                 };
                 DBConnection1.ExecuteNonQuery(sqlupdateTarget, targetParameters);
+                Console.WriteLine("target update successfully ");
+
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
+                Console.WriteLine("Error update target");
+
             }
-            
-                
-           
+
+
+
 
 
         }
@@ -70,12 +79,14 @@ namespace Malshinon.Dal
 
                 };
                 object result = DBConnection1.ExecuteScalar(sql, parameters);
+                Console.WriteLine("Average obtained successfully");
                 if (result == null || result == DBNull.Value)
                 { return 0; }
                 return Convert.ToDouble(result);
             }catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
+                Console.WriteLine("Error in getting average");
                 return 0;
             }
             
@@ -83,26 +94,37 @@ namespace Malshinon.Dal
 
         public static Alert IsAlertBurstReport(int targetId)
         {
-            string sql = @"SELECT timestamp FROM intelreports WHERE target_id  = @id AND timestamp >= NOW() - INTERVAL 15 MINUTE ORDER BY timestamp  ASC";
-            var parameters = new Dictionary<string, object>
+            try
             {
-                {"@id",targetId}
-            };
-            var rows = DBConnection1.ExecuteQuery(sql, parameters);
-            if (rows.Count > 2)
-            {
-                DateTime windowstart = Convert.ToDateTime(rows[0]["timestamp"]);
-                DateTime windowsend = Convert.ToDateTime(rows[rows.Count -1]["timestamp"]);
-                return new Alert
+                string sql = @"SELECT timestamp FROM intelreports WHERE target_id  = @id AND timestamp >= NOW() - INTERVAL 15 MINUTE ORDER BY timestamp  ASC";
+                var parameters = new Dictionary<string, object>
                 {
-                    TargetId = targetId,
-                    Reason = "Three or more reports in less than 15 minutes",
-                    WindowStart = windowstart,
-                    WindowEnd = windowsend,
-                    AlertTime = DateTime.Now
+                     {"@id",targetId}
                 };
+                var rows = DBConnection1.ExecuteQuery(sql, parameters);
+                if (rows.Count > 2)
+                {
+                    DateTime windowstart = Convert.ToDateTime(rows[0]["timestamp"]);
+                    DateTime windowsend = Convert.ToDateTime(rows[rows.Count - 1]["timestamp"]);
+                    return new Alert
+                    {
+                        TargetId = targetId,
+                        Reason = "Three or more reports in less than 15 minutes",
+                        WindowStart = windowstart,
+                        WindowEnd = windowsend,
+                        AlertTime = DateTime.Now
+                    };
+                }
+                return null;
             }
-            return null;
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                Console.WriteLine("Error checking BURS reports");
+                return null;
+            }
+
+
         }
         
     }

@@ -13,6 +13,11 @@ namespace Malshinon.Services
     {
         public static void SubmitReport(string firstNameTarget, string lastNameTarget, string firstNameReporter, string lastNameReporter, string text)
         {
+            if (string.IsNullOrEmpty(firstNameTarget)||string.IsNullOrEmpty(lastNameTarget) ||string.IsNullOrEmpty(firstNameReporter) || string.IsNullOrEmpty(lastNameReporter) || string.IsNullOrEmpty(text))
+            {
+                Console.WriteLine("invalid input please try again");
+                return;
+            }
             var target = AnalysisService.GetOrCreatePerson(firstNameTarget, lastNameTarget);
             var reporter = AnalysisService.GetOrCreatePerson(firstNameReporter, lastNameReporter);
             ReprtsDal.AddReport(reporter.Id, target.Id, text);
