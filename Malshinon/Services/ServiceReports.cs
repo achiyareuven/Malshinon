@@ -11,15 +11,34 @@ namespace Malshinon.Services
 {
     public static class ServiceReports
     {
-        public static void SubmitReport(string firstNameTarget, string lastNameTarget,string firstNameReporter,string lastNameReporter,string text)
+        public static void SubmitReport(string firstNameTarget, string lastNameTarget, string firstNameReporter, string lastNameReporter, string text)
         {
             var target = AnalysisService.GetOrCreatePerson(firstNameTarget, lastNameTarget);
-            var reporter = AnalysisService.GetOrCreatePerson(firstNameReporter,lastNameReporter);
+            var reporter = AnalysisService.GetOrCreatePerson(firstNameReporter, lastNameReporter);
             ReprtsDal.AddReport(reporter.Id, target.Id, text);
             if (IsHeCanBeAgant(reporter.FirstName, reporter.LastName, reporter.Id))
             {
-                PeopleDal.UpDateRecruitStatus(reporter.Id,true);
+                PeopleDal.UpDateRecruitStatus(reporter.Id, true);
             }
+            if (target.NumReports >= 20)
+            {
+                PeopleDal.UpDateDangerousStatus(target.Id, true);
+                Alert alert = new Alert
+                {
+                    TargetId = target.Id,
+                    Reason = "Mentioned in more than 20 reports",
+                    AlertTime = DateTime.Now
+
+                };
+                AlertDal.AddAlert(alert);
+            }
+            Alert burstAlert = ReprtsDal.IsAlertBurstReport(target.Id);
+            if (burstAlert != null)
+            {
+                AlertDal.AddAlert(burstAlert);
+            }
+
+
 
         }
         public static bool IsHeCanBeAgant(string firstNameReporter, string lastNameReporter, int reporterid)

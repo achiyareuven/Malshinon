@@ -95,10 +95,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Dal\AlertDal.cs" />
     <Compile Include="Dal\DBConnection.cs" />
     <Compile Include="Dal\DBConnection1.cs" />
     <Compile Include="Dal\PeopleDal.cs" />
     <Compile Include="Dal\ReprtsDal.cs" />
+    <Compile Include="Models\Alert.cs" />
     <Compile Include="Models\People.cs" />
     <Compile Include="Models\Rports.cs" />
     <Compile Include="Program.cs" />

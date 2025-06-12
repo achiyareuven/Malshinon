@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Malshinon.Models;
 
 namespace Malshinon.Dal
 {
@@ -79,6 +80,32 @@ namespace Malshinon.Dal
             }
             
         }
+
+        public static Alert IsAlertBurstReport(int targetId)
+        {
+            string sql = @"SELECT timestamp FROM intelreports WHERE target_id  = @id AND timestamp >= NOW() - INTERVAL 15 MINUTE ORDER BY timestamp  ASC";
+            var parameters = new Dictionary<string, object>
+            {
+                {"@id",targetId}
+            };
+            var rows = DBConnection1.ExecuteQuery(sql, parameters);
+            if (rows.Count > 2)
+            {
+                DateTime windowstart = Convert.ToDateTime(rows[0]["timestamp"]);
+                DateTime windowsend = Convert.ToDateTime(rows[rows.Count -1]["timestamp"]);
+                return new Alert
+                {
+                    TargetId = targetId,
+                    Reason = "Three or more reports in less than 15 minutes",
+                    WindowStart = windowstart,
+                    WindowEnd = windowsend,
+                    AlertTime = DateTime.Now
+                };
+            }
+            return null;
+        }
+        
     }
+
 }
 
