@@ -18,15 +18,40 @@ namespace Malshinon.Services
                 Console.WriteLine("invalid input please try again");
                 return;
             }
-            var finalTime = time ?? DateTime.Now;
-            var target = AnalysisService.GetOrCreatePerson(firstNameTarget, lastNameTarget);
-            var reporter = AnalysisService.GetOrCreatePerson(firstNameReporter, lastNameReporter);
+            DateTime finalTime = time ?? DateTime.Now;
+            People target = AnalysisService.GetOrCreatePerson(firstNameTarget, lastNameTarget);
+            People reporter = AnalysisService.GetOrCreatePerson(firstNameReporter, lastNameReporter);
+
             ReprtsDal.AddReport(reporter.Id, target.Id, text, finalTime);
-            if (IsHeCanBeAgant(reporter.FirstName, reporter.LastName, reporter.Id))
+
+            reporter = PeopleDal.GetPersonByName(reporter.FirstName, reporter.LastName);
+            target= PeopleDal.GetPersonByName(target.FirstName, target.LastName);
+
+            IsHeCanBeAgant(reporter);
+            CheckAlertAndStatuaTarget(target);
+
+
+
+
+        }
+        public static void IsHeCanBeAgant(People reporter)
+        {
+            if (reporter != null&&
+                !reporter.IsRecruitCandidate&&
+                reporter.NumReports>=10&&
+                reporter.NumMentions==0 &&
+                ReprtsDal.GetAvgReportsText(reporter.Id)>= 100)
             {
                 PeopleDal.UpDateRecruitStatus(reporter.Id, true);
+                Console.WriteLine($"{reporter.FirstName} {reporter.LastName} updated Recruit status ");
+
             }
-            if (target.NumReports >= 20)
+        }
+        private static void CheckAlertAndStatuaTarget(People target)
+        {
+            if (target != null && 
+                !target.IsDangerous&&
+                target.NumMentions >= 20)
             {
                 PeopleDal.UpDateDangerousStatus(target.Id, true);
                 Alert alert = new Alert
@@ -34,29 +59,17 @@ namespace Malshinon.Services
                     TargetId = target.Id,
                     Reason = "Mentioned in more than 20 reports",
                     AlertTime = DateTime.Now
-
                 };
                 AlertDal.AddAlert(alert);
+                Console.WriteLine($"ALERT: {target.FirstName} {target.LastName} became dangerous");
             }
             Alert burstAlert = ReprtsDal.IsAlertBurstReport(target.Id);
             if (burstAlert != null)
             {
                 AlertDal.AddAlert(burstAlert);
+                Console.WriteLine($"ALERT: burst alert created for {target.FirstName} {target.LastName}");
             }
-
-
-
         }
-        public static bool IsHeCanBeAgant(string firstNameReporter, string lastNameReporter, int reporterid)
-        {
-            People reporter = (PeopleDal.GetPersonByName(firstNameReporter, lastNameReporter));
-            if (reporter.NumMentions > 10 && reporter.NumReports < 1 &&
-                ReprtsDal.GetAvgReportsText(reporter.Id) >= 100)
-            {
-                return true;
-            }
-            return false;
-            
-        }
+
     }
 }

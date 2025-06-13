@@ -13,12 +13,12 @@ namespace Malshinon.Services
     {
  
         public static People GetOrCreatePerson(string first, string last)
-            {
+        {
                 if (!PeopleDal.IsExists(first, last))
                     PeopleDal.AddPerso(first, last);
 
                     return PeopleDal.GetPersonByName(first, last);
-            }
+        }
         public static string GetSracrtCodeByName(string firstname ,string lastname)
         {
             if (!PeopleDal.IsExists(firstname, lastname))

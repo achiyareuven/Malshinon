@@ -83,6 +83,7 @@ namespace Malshinon.Dal
                 Console.WriteLine("Average obtained successfully");
                 if (result == null || result == DBNull.Value)
                 { return 0; }
+                Console.WriteLine(Convert.ToDouble(result));
                 return Convert.ToDouble(result);
             }catch (Exception ex)
             {
