@@ -46,7 +46,7 @@ namespace Malshinon.Services
                 Console.WriteLine("You do not have permission.");
                 return null;
             }
-            return PeopleDal.GetAllDangerous();
+            return PeopleDal.GetAllRecruitCandidate();
         }
 
 

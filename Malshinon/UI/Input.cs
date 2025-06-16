@@ -38,7 +38,7 @@ namespace Malshinon.UI
             string firstname = Console.ReadLine();
             Console.WriteLine("enter your last name");
             string lastname = Console.ReadLine();
-            List<People> PeopleList = AnalysisService.GetMostDangerous(firstname, lastname);
+            List<People> PeopleList = AnalysisService.RecruitCandidate(firstname, lastname);
             if (PeopleList == null || PeopleList.Count == 0)
             {
                 Console.WriteLine("No results found.");
